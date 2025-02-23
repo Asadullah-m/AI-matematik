@@ -50,7 +50,11 @@ def show_ui():
         st.session_state.exercise_attempt = st.text_area("✍️ Skriv din løsning her:")
 
         if st.button("✅ Tjek mit svar"):
-            if st.session_state.exercise_attempt:
+            # NY: Tjekker om exercise_attempt er tomt eller kun indeholder mellemrum
+            if not st.session_state.exercise_attempt or st.session_state.exercise_attempt.strip() == "":
+                st.write("💡 Du skal skrive din løsning, før du kan tjekke den!")
+            else:
+                # NY: Vis løsningen, hvis der er indtastet noget
                 st.write("### ✅ Løsning:")
                 display_math_response(st.session_state.exercise_solution)
 
