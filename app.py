@@ -1,6 +1,6 @@
 import streamlit as st
 from src.generator import generate_explanation, generate_exercise, generate_solution, generate_hint
-from src.utils import display_math_response
+from src.utils import display_math_response, text_to_speech
 
 def show_ui():
     """Viser brugergrænsefladen til AI Matematikopgavegeneratoren med én opgave ad gangen."""
@@ -27,6 +27,11 @@ def show_ui():
         st.subheader(f"📚 Forklaring af {selected_topic}")
         display_math_response(st.session_state.explanation)
 
+        # 🎤 Tilføj en læseknap (Text-to-Speech)
+        if st.button("🔊 Lyt til forklaringen"):
+            audio_file = text_to_speech(st.session_state.explanation)
+            st.audio(audio_file, format="audio/mp3")
+
         if st.button("🆘 Få hjælp til forklaringen"):
             hint = generate_hint(st.session_state.explanation)
             st.write(f"💡 **Alternativ forklaring:** {hint}")
@@ -50,11 +55,9 @@ def show_ui():
         st.session_state.exercise_attempt = st.text_area("✍️ Skriv din løsning her:")
 
         if st.button("✅ Tjek mit svar"):
-            # NY: Tjekker om exercise_attempt er tomt eller kun indeholder mellemrum
             if not st.session_state.exercise_attempt or st.session_state.exercise_attempt.strip() == "":
                 st.write("💡 Du skal skrive din løsning, før du kan tjekke den!")
             else:
-                # NY: Vis løsningen, hvis der er indtastet noget
                 st.write("### ✅ Løsning:")
                 display_math_response(st.session_state.exercise_solution)
 
