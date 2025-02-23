@@ -5,24 +5,22 @@ from dotenv import load_dotenv
 # Indlæs API-nøgle
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
-client = openai.OpenAI(api_key=api_key) if api_key else None  # NY: Opdateret til den nye OpenAI API (version 1.0.0+)
+client = openai.OpenAI(api_key=api_key) if api_key else None  # ✅ Tilføjet din nye client-tilføjelse
 
 def generate_explanation(topic):
-    """Genererer en forklaring af emnet med eksempler."""
+    """Genererer en forklaring af emnet med eksempler, inklusive LaTeX-formler."""
     prompt = f"""
     Forklar begrebet {topic} for en 5. klasse elev på en pædagogisk måde.
     - Start med en letforståelig introduktion.
     - Giv mindst ét praktisk eksempel, som elever kan relatere til.
     - Brug venlige og motiverende sætninger.
-    - Skriv ALLE matematiske udtryk og variabler i LaTeX-format med $...$ for inline-formler (f.eks. $x$ for variablen x, $x + 3 = 7$ for en ligning). Undgå $$...$$ for blokformler.
-    - Hold LaTeX-udtrykkene simple og undgå komplekse kommandoer eller specialtegn, der ikke understøttes af en standard LaTeX-renderer som MathJax.
-    - Brug naturlige linjeskift og afsnit, men undgå for mange unødvendige mellemrum eller tomme linjer.
+    - Hvis relevant, brug LaTeX-formatering som $$A = \\frac{{1}}{{2}} \\times \\text{{basis}} \\times \\text{{højde}}$$.
     """
 
-    response = client.chat.completions.create(  # NY: Opdateret til den nye API-metode
-        model="gpt-4",  # Eller "gpt-4o", hvis du foretrækker det
+    response = client.chat.completions.create(
+        model="gpt-4",
         messages=[
-            {"role": "system", "content": "Du er en matematiklærer, der forklarer emner på en pædagogisk måde til 5. klasse-elever (alder ca. 11 år)."},
+            {"role": "system", "content": "Du er en matematiklærer, der forklarer emner på en pædagogisk måde."},
             {"role": "user", "content": prompt}
         ]
     )
@@ -35,36 +33,33 @@ def generate_exercise(topic, difficulty):
     - Opgaven skal være praktisk og let at forstå.
     - Giv IKKE løsningen eller nogen hints.
     - Stil spørgsmålet klart og tydeligt.
-    - Skriv ALLE matematiske udtryk og variabler i LaTeX-format med $...$ for inline-formler (f.eks. $x$ for variablen x, $x + 3 = 7$ for en ligning). Undgå $$...$$ for blokformler.
-    - Hold LaTeX-udtrykkene simple og undgå komplekse kommandoer eller specialtegn, der ikke understøttes af en standard LaTeX-renderer som MathJax.
-    - Brug naturlige linjeskift og afsnit, men undgå for mange unødvendige mellemrum eller tomme linjer.
     """
 
-    response = client.chat.completions.create(  # NY: Opdateret til den nye API-metode
-        model="gpt-4",  # Eller "gpt-4o"
+    response = client.chat.completions.create(
+        model="gpt-4",
         messages=[
-            {"role": "system", "content": "Du er en matematiklærer, der laver opgaver til 5. klasse-elever (alder ca. 11 år) uden at give svaret direkte."},
+            {"role": "system", "content": "Du er en matematiklærer, der laver opgaver til elever uden at give svaret direkte."},
             {"role": "user", "content": prompt}
         ]
     )
     return response.choices[0].message.content
 
 def generate_solution(topic, exercise_text):
-    """Genererer en forklaring og løsning på en matematikopgave."""
+    """Genererer en forklaring og løsning på en matematikopgave, inklusive LaTeX-formler."""
     prompt = f"""
     Giv en trin-for-trin løsning til denne matematikopgave relateret til {topic}:
     {exercise_text}
 
-    Forklar løsningen på en pædagogisk måde, så en 5. klasse elev (alder ca. 11 år) kan forstå det, ikke yngre elever.
-    - Skriv ALLE matematiske udtryk og variabler i LaTeX-format med $...$ for inline-formler (f.eks. $x$ for variablen x, $x + 3 = 7$ for en ligning). Undgå $$...$$ for blokformler.
-    - Hold LaTeX-udtrykkene simple og undgå komplekse kommandoer eller specialtegn, der ikke understøttes af en standard LaTeX-renderer som MathJax.
-    - Brug naturlige linjeskift og afsnit, men undgå for mange unødvendige mellemrum eller tomme linjer.
+    Forklar løsningen på en pædagogisk måde, så en 5. klasse elev kan forstå det.
+    Brug LaTeX-formatering hvor nødvendigt, fx:
+    - Formel: $$A = \\frac{{1}}{{2}} \\times \\text{{basis}} \\times \\text{{højde}}$$.
+    - Beregning: $$\\frac{{1}}{{2}} \\times 6 \\times 4 = 12$$.
     """
 
-    response = client.chat.completions.create(  # NY: Opdateret til den nye API-metode
-        model="gpt-4",  # Eller "gpt-4o"
+    response = client.chat.completions.create(
+        model="gpt-4",
         messages=[
-            {"role": "system", "content": "Du er en matematiklærer, der forklarer løsninger pædagogisk til 5. klasse-elever (alder ca. 11 år)."},
+            {"role": "system", "content": "Du er en matematiklærer, der forklarer løsninger pædagogisk."},
             {"role": "user", "content": prompt}
         ]
     )
@@ -75,16 +70,13 @@ def generate_hint(text):
     prompt = f"""
     Eleven har svært ved at forstå følgende: {text}
 
-    Giv et kort hint eller en alternativ forklaring, der hjælper dem uden at afsløre svaret helt, og som passer til en 5. klasse elev (alder ca. 11 år), ikke yngre elever.
-    - Skriv ALLE matematiske udtryk og variabler i LaTeX-format med $...$ for inline-formler (f.eks. $x$ for variablen x, $x + 3 = 7$ for en ligning). Undgå $$...$$ for blokformler.
-    - Hold LaTeX-udtrykkene simple og undgå komplekse kommandoer eller specialtegn, der ikke understøttes af en standard LaTeX-renderer som MathJax.
-    - Brug naturlige linjeskift og afsnit, men undgå for mange unødvendige mellemrum eller tomme linjer.
+    Giv et kort hint eller en alternativ forklaring, der hjælper dem uden at afsløre svaret helt.
     """
 
-    response = client.chat.completions.create(  # NY: Opdateret til den nye API-metode
-        model="gpt-4",  # Eller "gpt-4o"
+    response = client.chat.completions.create(
+        model="gpt-4",
         messages=[
-            {"role": "system", "content": "Du er en hjælpsom matematiklærer, der giver hints til 5. klasse-elever (alder ca. 11 år)."},
+            {"role": "system", "content": "Du er en hjælpsom matematiklærer, der giver hints til elever."},
             {"role": "user", "content": prompt}
         ]
     )
