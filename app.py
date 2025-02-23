@@ -1,6 +1,8 @@
 import streamlit as st
 from src.generator import generate_explanation, generate_exercise, generate_solution, generate_hint
 from src.utils import display_math_response, text_to_speech
+from gtts import gTTS
+import os
 
 def show_ui():
     """Viser brugergrænsefladen til AI Matematikopgavegeneratoren med én opgave ad gangen."""
