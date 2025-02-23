@@ -19,10 +19,10 @@ def generate_explanation(topic):
     - Brug naturlige linjeskift og afsnit, men undgå for mange unødvendige mellemrum eller tomme linjer.
     """
 
-    response = client.chat.completions.create(
+    response = client.chat.completions.create(  # NY: Opdateret til den nye API-metode
         model="gpt-4",  # Eller "gpt-4o", hvis du foretrækker det
         messages=[
-            {"role": "system", "content": "Du er en matematiklærer, der forklarer emner på en pædagogisk måde."},
+            {"role": "system", "content": "Du er en matematiklærer, der forklarer emner på en pædagogisk måde til 5. klasse-elever (alder ca. 11 år)."},
             {"role": "user", "content": prompt}
         ]
     )
@@ -40,10 +40,10 @@ def generate_exercise(topic, difficulty):
     - Brug naturlige linjeskift og afsnit, men undgå for mange unødvendige mellemrum eller tomme linjer.
     """
 
-    response = client.chat.completions.create(
+    response = client.chat.completions.create(  # NY: Opdateret til den nye API-metode
         model="gpt-4",  # Eller "gpt-4o"
         messages=[
-            {"role": "system", "content": "Du er en matematiklærer, der laver opgaver til elever uden at give svaret direkte."},
+            {"role": "system", "content": "Du er en matematiklærer, der laver opgaver til 5. klasse-elever (alder ca. 11 år) uden at give svaret direkte."},
             {"role": "user", "content": prompt}
         ]
     )
@@ -55,16 +55,16 @@ def generate_solution(topic, exercise_text):
     Giv en trin-for-trin løsning til denne matematikopgave relateret til {topic}:
     {exercise_text}
 
-    Forklar løsningen på en pædagogisk måde, så en 5. klasse elev kan forstå det.
+    Forklar løsningen på en pædagogisk måde, så en 5. klasse elev (alder ca. 11 år) kan forstå det, ikke yngre elever.
     - Skriv ALLE matematiske udtryk og variabler i LaTeX-format med $...$ for inline-formler (f.eks. $x$ for variablen x, $x + 3 = 7$ for en ligning). Undgå $$...$$ for blokformler.
     - Hold LaTeX-udtrykkene simple og undgå komplekse kommandoer eller specialtegn, der ikke understøttes af en standard LaTeX-renderer som MathJax.
     - Brug naturlige linjeskift og afsnit, men undgå for mange unødvendige mellemrum eller tomme linjer.
     """
 
-    response = client.chat.completions.create(
+    response = client.chat.completions.create(  # NY: Opdateret til den nye API-metode
         model="gpt-4",  # Eller "gpt-4o"
         messages=[
-            {"role": "system", "content": "Du er en matematiklærer, der forklarer løsninger pædagogisk."},
+            {"role": "system", "content": "Du er en matematiklærer, der forklarer løsninger pædagogisk til 5. klasse-elever (alder ca. 11 år)."},
             {"role": "user", "content": prompt}
         ]
     )
@@ -75,16 +75,16 @@ def generate_hint(text):
     prompt = f"""
     Eleven har svært ved at forstå følgende: {text}
 
-    Giv et kort hint eller en alternativ forklaring, der hjælper dem uden at afsløre svaret helt.
+    Giv et kort hint eller en alternativ forklaring, der hjælper dem uden at afsløre svaret helt, og som passer til en 5. klasse elev (alder ca. 11 år), ikke yngre elever.
     - Skriv ALLE matematiske udtryk og variabler i LaTeX-format med $...$ for inline-formler (f.eks. $x$ for variablen x, $x + 3 = 7$ for en ligning). Undgå $$...$$ for blokformler.
     - Hold LaTeX-udtrykkene simple og undgå komplekse kommandoer eller specialtegn, der ikke understøttes af en standard LaTeX-renderer som MathJax.
     - Brug naturlige linjeskift og afsnit, men undgå for mange unødvendige mellemrum eller tomme linjer.
     """
 
-    response = client.chat.completions.create(
+    response = client.chat.completions.create(  # NY: Opdateret til den nye API-metode
         model="gpt-4",  # Eller "gpt-4o"
         messages=[
-            {"role": "system", "content": "Du er en hjælpsom matematiklærer, der giver hints til elever."},
+            {"role": "system", "content": "Du er en hjælpsom matematiklærer, der giver hints til 5. klasse-elever (alder ca. 11 år)."},
             {"role": "user", "content": prompt}
         ]
     )
